@@ -3,25 +3,6 @@
 - โปรแกรมสำหรับจัดการข้อมูลการชำระเงินจากไฟล์ `paymentinfo.csv` (เพิ่ม/ค้นหา/แก้ไข/ลบ) ผ่านเมนูบนคอนโซล
 - ไฟล์หลัก: `payment.c`, `payment.h` และข้อมูลตัวอย่าง `paymentinfo.csv`
 
-**วิธีคอมไพล์และรัน (Windows + GCC/MinGW)**
-- คอมไพล์โปรแกรมหลัก:
-  - `gcc -std=c11 -Wall -Wextra -O2 -o payment.exe payment.c`
-- รันโปรแกรม:
-  - `./payment.exe`
-
-หมายเหตุคอมไพล์ (ตัวเลือกด้วย MSVC)
-- หากใช้ MSVC Developer Command Prompt:
-  - `cl /std:c11 /W4 payment.c /Fe:payment.exe`
-
-**รันทดสอบหน่วย (Unit Test)**
-- สร้างไบนารีทดสอบและรัน:
-  - `gcc -DUNIT_TEST -std=c11 -Wall -Wextra -O0 -g -o test_payment_unit.exe test_payment_unit.c payment.c`
-  - `./test_payment_unit.exe`
-
-**รันทดสอบปลายทาง (E2E)**
-- รันสคริปต์ PowerShell:
-  - `powershell -ExecutionPolicy Bypass -File .\test_payment_e2e.ps1`
-
 ภายในโปรแกรม
 - ในเมนูหลัก กด `5` เพื่อรันทดสอบหน่วย และ `6` เพื่อรันทดสอบ E2E
 

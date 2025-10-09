@@ -1,0 +1,15 @@
+วิธีคอมไพล์และรันโปรแกรม
+
+1.โปรแกรมหลัก
+gcc -o payment.exe payment.c
+.\payment.exe
+
+2.Unit Test 
+gcc -DUNIT_TEST -o test_payment_unit.exe test_payment_unit.c payment.c
+.\test_payment_unit.exe
+
+3.E2E 
+gcc -o payment.exe payment.c
+powershell -ExecutionPolicy Bypass -File .\test_payment_e2e.ps1
+
+
