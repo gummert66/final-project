@@ -1,39 +1,37 @@
-# final-project
-A please
+# ระบบจัดการการชำระเงิน (final-project)
 
-## Build & Test
+- โปรแกรมสำหรับจัดการข้อมูลการชำระเงินจากไฟล์ `paymentinfo.csv` (เพิ่ม/ค้นหา/แก้ไข/ลบ) ผ่านเมนูบนคอนโซล
+- ไฟล์หลัก: `payment.c`, `payment.h` และข้อมูลตัวอย่าง `paymentinfo.csv`
 
-- Build app:
-  - `gcc -o payment.exe payment.c`
+**วิธีคอมไพล์และรัน (Windows + GCC/MinGW)**
+- คอมไพล์โปรแกรมหลัก:
+  - `gcc -std=c11 -Wall -Wextra -O2 -o payment.exe payment.c`
+- รันโปรแกรม:
+  - `./payment.exe`
 
-- Run unit tests (AAA style):
-  - `gcc -DUNIT_TEST -o test_payment_unit.exe test_payment_unit.c payment.c`
+หมายเหตุคอมไพล์ (ตัวเลือกด้วย MSVC)
+- หากใช้ MSVC Developer Command Prompt:
+  - `cl /std:c11 /W4 payment.c /Fe:payment.exe`
+
+**รันทดสอบหน่วย (Unit Test)**
+- สร้างไบนารีทดสอบและรัน:
+  - `gcc -DUNIT_TEST -std=c11 -Wall -Wextra -O0 -g -o test_payment_unit.exe test_payment_unit.c payment.c`
   - `./test_payment_unit.exe`
 
-- Run end-to-end (E2E):
+**รันทดสอบปลายทาง (E2E)**
+- รันสคริปต์ PowerShell:
   - `powershell -ExecutionPolicy Bypass -File .\test_payment_e2e.ps1`
 
-Notes:
-- Header `payment.h` declares all function prototypes and shared globals.
-- `payment.c` wraps `main` with `#ifndef UNIT_TEST` so test binaries can link without conflicts.
+ภายในโปรแกรม
+- ในเมนูหลัก กด `5` เพื่อรันทดสอบหน่วย และ `6` เพื่อรันทดสอบ E2E
 
-In-App UI Shortcuts
-- From the main menu, choose `5` to build and run unit tests.
-- Choose `6` to run the PowerShell E2E harness.
+ข้อควรรู้และความปลอดภัยของข้อมูล
+- จำกัดจำนวนระเบียนสูงสุดไว้ที่ `MAX` (100) หากเกินจะถูกละเว้น
+- ตรวจสอบรูปแบบรหัสการชำระเงิน (ตัวอย่าง `P001`) ก่อนโหลด/บันทึก
+- รับค่าตัวเลขอย่างปลอดภัยด้วย `fgets` และตรวจสอบช่วงค่าที่อนุญาต
+- บันทึกไฟล์แบบอะตอมมิก: เขียนไปยังไฟล์ชั่วคราว `*.tmp` แล้วเปลี่ยนชื่อเป็นไฟล์จริง
 
-Security & Robustness
-- CSV load caps at `MAX` (100); extra rows are ignored.
-- Invalid payment IDs are rejected during load (`^P\d{3}$`).
-- Interactive numeric inputs use `fgets` + parse with validation loops.
-- Saving is atomic: writes to `*.tmp` and renames to the final file.
-- CSV injection mitigation: fields starting with `= + - @` are prefixed with `'` when saving.
-- Platform: in-app runners for tests are wrapped with `#ifdef _WIN32`.
+ธงคอมไพล์ที่แนะนำ
+- โหมดดีบัก: `-std=c11 -Wall -Wextra -Werror -O0 -g`
+- โหมดรีลีส: `-std=c11 -O2 -DNDEBUG`
 
-Suggested Build Flags
-- Debug: `-std=c11 -Wall -Wextra -Werror -O0 -g -fsanitize=address,undefined`
-- Release: `-std=c11 -O2 -DNDEBUG`
-Security & Robustness (extended)
-- CSV quoting per RFC4180: fields containing `,` or `"` are quoted and quotes are doubled.
-- Saving is atomic: writes to `*.tmp`, fsync/commit, then renames to the final file; `.lock` file prevents concurrent writers.
-- Amount now uses `double` (was `float`).
-- CSV path configurable via env var `PAYMENT_CSV`.
